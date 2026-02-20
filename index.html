@@ -219,40 +219,51 @@
 </div>
             </div>
 
-<form id="visum-form">
-                <div class="form-grid">
-                    <div class="space-y-4">
-                        <div>
-                            <div class="mb-2 text-left">
-                                <a href="https://galih-ai.github.io/e-KopSu/" target="_blank" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
-                                   KLIK DISINI UNTUK MEMBUAT KOP SEKOLAH ANDA
-                                </a>
-                            </div>
+<div>
+<div class="mb-6">
+    <div class="mb-2 text-left">
+        <a href="https://galih-ai.github.io/e-KopSu/" target="_blank" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline">
+            KLIK DISINI UNTUK MEMBUAT KOP SEKOLAH ANDA
+        </a>
+    </div>
+    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">
+        Upload Kop Surat (Spesifikasi gambar ukuran 2000 x 400 pixel, ukuran file 356.7 KB, 71 dpi, 24 bit)
+    </label>
+    <div class="flex gap-2 items-center">
+        <input type="file" id="kopSuratFile" accept="image/*" onchange="previewKop(this)" class="block w-full text-xs border border-slate-200 p-2 rounded-lg bg-slate-50">
+        <button type="button" id="removeKopButton" onclick="removeKop()" class="hidden bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 transition-all h-[38px]">
+            <i class="ph ph-trash"></i> HAPUS
+        </button>
+    </div>
+</div>
+     
+<div class="mb-6">
+    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tanggal & Waktu</label>
+    <div class="flex gap-2">
+        <input type="date" id="tanggalKunjungan" class="w-full p-2 border border-slate-200 rounded-lg text-sm">
+        <input type="time" id="waktuKunjungan" class="w-full p-2 border border-slate-200 rounded-lg text-sm">
+    </div>
+</div>
 
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Upload Kop Surat (Spesifikasi gambar ukuran 2000 x 400 pixel, ukuran file 356.7 KB, 71 dpi, 24 bit)</label>
-                            <input type="file" id="kopSuratFile" accept="image/*" onchange="previewKop(this)" class="block w-full text-xs border border-slate-200 p-2 rounded-lg bg-slate-50">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tanggal & Waktu</label>
-                            <div class="flex gap-2">
-                                <input type="date" id="tanggalKunjungan" class="w-full p-2 border border-slate-200 rounded-lg text-sm">
-                                <input type="time" id="waktuKunjungan" class="w-full p-2 border border-slate-200 rounded-lg text-sm">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Hasil Kunjungan</label>
-                            <textarea id="hasilKunjungan" rows="6" placeholder="Tuliskan secara detail hasil kunjungan di sini..." class="w-full p-2 border border-slate-200 rounded-lg text-sm"></textarea>
-                        </div>
+<div class="mb-6">
+    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Hasil Kunjungan</label>
+    <textarea id="hasilKunjungan" rows="6" placeholder="Tuliskan secara detail hasil kunjungan di sini..." class="w-full p-2 border border-slate-200 rounded-lg text-sm"></textarea>
+</div>
                     </div>
 
                     <div class="space-y-4">
                         <div class="p-4 border border-indigo-100 bg-indigo-50/50 rounded-xl">
-                            <div class="flex items-center justify-between mb-3">
-                                <label class="block text-xs font-bold text-indigo-700 uppercase">Petugas Pengunjung</label>
-                                <button type="button" id="addPetugas" class="bg-indigo-600 text-white text-[10px] px-3 py-1 rounded-md hover:bg-indigo-700 flex items-center gap-1 font-bold">
-                                    <i class="ph ph-plus"></i> TAMBAH
-                                </button>
-                            </div>
+<div class="flex items-center justify-between mb-3">
+    <label class="block text-xs font-bold text-indigo-700 uppercase">Petugas Pengunjung</label>
+    <div class="flex gap-2">
+        <button type="button" id="resetPetugas" class="bg-red-500 text-white text-[10px] px-3 py-1 rounded-md hover:bg-red-600 flex items-center gap-1 font-bold">
+            <i class="ph ph-x"></i> BATAL
+        </button>
+        <button type="button" id="addPetugas" class="bg-indigo-600 text-white text-[10px] px-3 py-1 rounded-md hover:bg-indigo-700 flex items-center gap-1 font-bold">
+            <i class="ph ph-plus"></i> TAMBAH
+        </button>
+    </div>
+</div>
                             <div id="petugasList" class="space-y-2 max-h-[160px] overflow-y-auto pr-1"></div>
                         </div>
                         <div>
@@ -568,20 +579,39 @@ function logout() {
             }
         };
 
-        window.previewKop = (input) => {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const base64 = e.target.result;
-                    document.getElementById('kopPlaceholder').classList.add('hidden');
-                    document.getElementById('doc-kop-surat').src = base64;
-                    document.getElementById('doc-kop-surat').classList.remove('hidden');
-                    document.getElementById('doc-kop-surat-2').src = base64;
-                    document.getElementById('doc-kop-surat-2').classList.remove('hidden');
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
+window.previewKop = (input) => {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64 = e.target.result;
+            
+            // Update gambar di preview
+            document.getElementById('kopPlaceholder').classList.add('hidden');
+            document.getElementById('doc-kop-surat').src = base64;
+            document.getElementById('doc-kop-surat').classList.remove('hidden');
+            document.getElementById('doc-kop-surat-2').src = base64;
+            document.getElementById('doc-kop-surat-2').classList.remove('hidden');
+            
+            // Munculkan tombol HAPUS
+            document.getElementById('removeKopButton').classList.remove('hidden');
         };
+        reader.readAsDataURL(input.files[0]); 
+    }
+};
+
+// Fungsi Baru untuk Menghapus Kop
+window.removeKop = () => {
+    // Reset input file
+    document.getElementById('kopSuratFile').value = "";
+    // Kembalikan ke tampilan default (Placeholder)
+    document.getElementById('kopPlaceholder').classList.remove('hidden'); 
+    document.getElementById('doc-kop-surat').classList.add('hidden');
+    document.getElementById('doc-kop-surat').src = "";
+    document.getElementById('doc-kop-surat-2').classList.add('hidden'); 
+    document.getElementById('doc-kop-surat-2').src = "";
+    // Sembunyikan kembali tombol HAPUS
+    document.getElementById('removeKopButton').classList.add('hidden');
+};
 
         window.saveAsPdf = async () => {
             const { jsPDF } = window.jspdf;
@@ -623,6 +653,18 @@ function logout() {
             document.getElementById('addPetugas').onclick = () => {
                 window.petugasPengunjung.push({ name: '', position: '' });
                 window.renderPetugasInput();
+            };
+
+            document.getElementById('resetPetugas').onclick = () => {
+                window.petugasPengunjung = []; // Mengosongkan data petugas
+                window.renderPetugasInput();   // Memperbarui tampilan form
+                window.updatePreview();        // Memperbarui pratinjau PDF
+            };
+
+            document.getElementById('resetPetugas').onclick = () => {
+                window.petugasPengunjung = []; // Mengosongkan data petugas
+                window.renderPetugasInput();   // Memperbarui tampilan form
+                window.updatePreview();        // Memperbarui pratinjau PDF
             };
 
             document.getElementById('enableDokumentasi').onchange = (e) => {
